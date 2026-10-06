@@ -1,0 +1,25 @@
+{
+  "name": "Recetario Personal",
+  "short_name": "Recetario",
+  "description": "Tus recetas favoritas, siempre a mano.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f1e7",
+  "theme_color": "#263c32",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://static.vecteezy.com/system/resources/thumbnails/079/993/321/small/crossed-fork-and-spoon-icons-for-food-and-dining-utensils-vector.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://static.vecteezy.com/system/resources/thumbnails/079/993/321/small/crossed-fork-and-spoon-icons-for-food-and-dining-utensils-vector.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
