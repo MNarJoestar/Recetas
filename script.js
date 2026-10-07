@@ -12,6 +12,8 @@ const photoPreview = document.getElementById('photoPreview');
 const formMessage = document.getElementById('formMessage');
 const dictationButton = document.getElementById('dictationButton');
 const dictationStatus = document.getElementById('dictationStatus');
+
+// Reconocimiento de voz con soporte para navegadores móviles (Chrome/Safari)
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition = null;
 let dictationBaseText = '';
@@ -27,15 +29,18 @@ if (SpeechRecognition) {
     dictationButton.classList.add('dictation-button-recording');
     dictationStatus.textContent = 'Escuchando… Habla con claridad.';
   };
+
   recognition.onresult = (event) => {
     const transcript = [...event.results].map((result) => result[0].transcript).join('').trim();
     recipeForm.elements.steps.value = [dictationBaseText, transcript].filter(Boolean).join('\n');
   };
+
   recognition.onerror = (event) => {
     dictationStatus.textContent = event.error === 'not-allowed'
       ? 'No se concedió permiso para usar el micrófono.'
       : 'No se pudo completar el dictado. Puedes intentarlo de nuevo.';
   };
+
   recognition.onend = () => {
     dictationButton.textContent = 'Grabar paso a paso';
     dictationButton.classList.remove('dictation-button-recording');
@@ -98,6 +103,7 @@ function showScreen(name) {
     editingRecipeId = null;
     editingRecipeCreatedAt = null;
     selectedPhoto = null;
+    photoInput.value = '';
     photoPreview.innerHTML = '';
     photoPreview.classList.add('hidden');
     formMessage.textContent = '';
@@ -161,9 +167,10 @@ photoInput.addEventListener('change', async () => {
   
   photoPreview.innerHTML = '';
   const image = document.createElement('img');
-  image.src = URL.createObjectURL(selectedPhoto);
+  const previewUrl = URL.createObjectURL(selectedPhoto);
+  image.src = previewUrl;
   image.alt = 'Vista previa de la foto de la receta';
-  image.onload = () => URL.revokeObjectURL(image.src);
+  image.onload = () => URL.revokeObjectURL(previewUrl);
   photoPreview.append(image);
   photoPreview.classList.remove('hidden');
   formMessage.textContent = '';
@@ -196,6 +203,8 @@ recipeForm.addEventListener('submit', async (event) => {
       editingRecipeId === null ? store.add(recipe) : store.put(recipe)
     ));
     editingRecipeId = null;
+    selectedPhoto = null;
+    photoInput.value = '';
     showScreen('list');
   } catch (error) {
     console.error('No se pudo guardar la receta:', error);
@@ -243,6 +252,7 @@ function beginEditing(recipe) {
   editingRecipeId = recipe.id;
   editingRecipeCreatedAt = recipe.createdAt;
   selectedPhoto = recipe.photo || null;
+  photoInput.value = '';
 
   recipeForm.elements.title.value = recipe.title;
   recipeForm.elements.ingredients.value = recipe.ingredients;
@@ -254,9 +264,10 @@ function beginEditing(recipe) {
   photoPreview.innerHTML = '';
   if (selectedPhoto) {
     const image = document.createElement('img');
-    image.src = URL.createObjectURL(selectedPhoto);
+    const previewUrl = URL.createObjectURL(selectedPhoto);
+    image.src = previewUrl;
     image.alt = 'Vista previa de la foto de la receta';
-    image.onload = () => URL.revokeObjectURL(image.src);
+    image.onload = () => URL.revokeObjectURL(previewUrl);
     photoPreview.append(image);
     photoPreview.classList.remove('hidden');
   } else {
@@ -314,9 +325,10 @@ function renderRecipeDetail(recipe) {
   if (recipe.photo) {
     const image = document.createElement('img');
     image.className = 'recipe-photo';
-    image.src = URL.createObjectURL(recipe.photo);
+    const photoUrl = URL.createObjectURL(recipe.photo);
+    image.src = photoUrl;
     image.alt = `Foto de ${recipe.title}`;
-    image.onload = () => URL.revokeObjectURL(image.src);
+    image.onload = () => URL.revokeObjectURL(photoUrl);
     detail.append(image);
   } else {
     const noPhoto = document.createElement('div');
