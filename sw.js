@@ -6,6 +6,8 @@ const ASSETS_TO_CACHE = [
   './styles.css',
   './script.js',
   './manifest.json',
+  './icon-192.png',
+  './icon-512.png',
   'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Playfair+Display:wght@700&display=swap'
 ];
 
